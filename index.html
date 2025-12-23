@@ -40,7 +40,7 @@ function onScanSuccess(decodedText) {
     const jarak = getDistance(lat, lng, OFFICE_LAT, OFFICE_LNG);
     const status = jarak <= MAX_RADIUS ? "VALID" : "DI LUAR AREA";
 
-    fetch("https://script.google.com/macros/s/AKfycbxdTzN86MWSCXPc0sEYn3yX7q1Ps3BvqeL4ejGyJRDURXSK2_ZFejkcmY2rX96h7Zdg/exec", {
+    fetch("https://script.google.com/macros/s/AKfycbym0TUkwd-tOcwxRkwbiebefQBk86uwQfaSmoj6wmX8-to-J4Nwb7xT-BzIvrdYP5FJ/exec", {
       method: "POST",
       body: JSON.stringify({
         nama: document.getElementById("nama").value,
