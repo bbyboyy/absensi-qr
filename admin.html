@@ -3,9 +3,11 @@
 <body>
 <h3>Generate QR Absensi</h3>
 <button onclick="generate()">Generate QR</button>
-<p id="qr"></p>
+<div id="qr" style="margin-top:20px;"></div>
+<p id="tokenText"></p>
 
 <script src="https://cdn.jsdelivr.net/npm/qrcodejs/qrcode.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <script>
 // function generate() {
 // //   fetch("https://script.google.com/macros/s/AKfycbym0TUkwd-tOcwxRkwbiebefQBk86uwQfaSmoj6wmX8-to-J4Nwb7xT-BzIvrdYP5FJ/exec")
@@ -39,7 +41,26 @@ function generate() {
     })
   })
   .then(res => res.json())
-  .then(data => alert("Token: " + data.token));
+  .then(data => {
+    alert("Token: " + data.token)
+
+    document.getElementById("tokenText").innerText =
+      "Token: " + data.token;
+
+    const qrContainer = document.getElementById("qr");
+    qrContainer.innerHTML = ""; // clear QR lama
+
+    const qrData = JSON.stringify({
+      token: data.token,
+      date: new Date().toISOString().slice(0, 10)
+    });
+
+    new QRCode(qrContainer, {
+      text: qrData,
+      width: 256,
+      height: 256
+    });
+  });
 }
 </script>
 </body>

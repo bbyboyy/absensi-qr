@@ -63,12 +63,14 @@ function onScanSuccess(decodedText) {
     //   })
     // });
 
+    const qrData = JSON.parse(scannedText);
+
     fetch("https://absensi-backend.martinusdx001.workers.dev/", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         action: "ABSEN",
-        token: token,
+        token: qrData.token,
         nama: document.getElementById("nama").value,
         userid: document.getElementById("userid").value,
         lat,
