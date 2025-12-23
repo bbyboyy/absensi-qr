@@ -4,6 +4,8 @@
   <meta charset="UTF-8">
   <title>Absensi QR</title>
   <script src="https://unpkg.com/html5-qrcode"></script>
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#0d6efd">
 </head>
 <body>
 
@@ -59,6 +61,11 @@ function onScanSuccess(decodedText) {
 
 new Html5Qrcode("reader")
   .start({ facingMode: "environment" }, { fps: 10, qrbox: 250 }, onScanSuccess);
+
+if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.register("service-worker.js")
+    .then(() => console.log("Service Worker registered"));
+}
 </script>
 
 </body>
