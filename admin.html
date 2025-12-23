@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<body>
+<h3>Generate QR Absensi</h3>
+<button onclick="generate()">Generate QR</button>
+<p id="qr"></p>
+
+<script src="https://cdn.jsdelivr.net/npm/qrcodejs/qrcode.min.js"></script>
+<script>
+function generate() {
+  fetch("URL_APPS_SCRIPT_GENERATE_TOKEN")
+    .then(res => res.text())
+    .then(token => {
+      const url = location.origin + "/?token=" + token;
+      document.getElementById("qr").innerHTML = "";
+      new QRCode(document.getElementById("qr"), url);
+    });
+}
+</script>
+</body>
+</html>

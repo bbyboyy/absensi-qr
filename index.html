@@ -5,6 +5,11 @@
   <title>Absensi QR</title>
   <script src="https://unpkg.com/html5-qrcode"></script>
   <link rel="manifest" href="manifest.json">
+
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Absensi QR">
+
   <meta name="theme-color" content="#0d6efd">
 </head>
 <body>
@@ -42,15 +47,18 @@ function onScanSuccess(decodedText) {
     const jarak = getDistance(lat, lng, OFFICE_LAT, OFFICE_LNG);
     const status = jarak <= MAX_RADIUS ? "VALID" : "DI LUAR AREA";
 
+    const urlParams = new URLSearchParams(window.location.search);
+    const token = urlParams.get("token");
+
     fetch("https://script.google.com/macros/s/AKfycbym0TUkwd-tOcwxRkwbiebefQBk86uwQfaSmoj6wmX8-to-J4Nwb7xT-BzIvrdYP5FJ/exec", {
       method: "POST",
       body: JSON.stringify({
+        token: token,
         nama: document.getElementById("nama").value,
         userid: document.getElementById("userid").value,
         lat,
         lng,
-        jarak: Math.round(jarak),
-        status
+        jarak: Math.round(jarak)
       })
     });
 
