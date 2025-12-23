@@ -31,20 +31,15 @@
 // }
 
 function generate() {
-  const API_URL = "https://script.google.com/macros/s/AKfycbym0TUkwd-tOcwxRkwbiebefQBk86uwQfaSmoj6wmX8-to-J4Nwb7xT-BzIvrdYP5FJ/exec";
-
-  fetch(API_URL, {
+  fetch("https://absensi-backend.martinusdx001.workers.dev/", {
     method: "POST",
-    body: "action=GENERATE_TOKEN"
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      action: "GENERATE_TOKEN"
+    })
   })
   .then(res => res.json())
-  .then(data => {
-    alert("Token: " + data.token);
-  })
-  .catch(err => {
-    console.error(err);
-    alert("FAILED");
-  });
+  .then(data => alert("Token: " + data.token));
 }
 </script>
 </body>

@@ -63,7 +63,7 @@ function onScanSuccess(decodedText) {
     //   })
     // });
 
-    fetch(API_URL, {
+    fetch("https://absensi-backend.martinusdx001.workers.dev/", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -75,7 +75,9 @@ function onScanSuccess(decodedText) {
         lng,
         jarak: Math.round(jarak)
       })
-    });
+    })
+    .then(res => res.json())
+    .then(data => alert(data.result));
 
     document.getElementById("status").innerText =
       `Absensi ${status} (${Math.round(jarak)} m)`;
