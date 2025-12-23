@@ -8,7 +8,7 @@
 <script src="https://cdn.jsdelivr.net/npm/qrcodejs/qrcode.min.js"></script>
 <script>
 function generate() {
-  fetch("URL_APPS_SCRIPT_GENERATE_TOKEN")
+  fetch("https://script.google.com/macros/s/AKfycbym0TUkwd-tOcwxRkwbiebefQBk86uwQfaSmoj6wmX8-to-J4Nwb7xT-BzIvrdYP5FJ/exec")
     .then(res => res.text())
     .then(token => {
       const url = location.origin + "/?token=" + token;
