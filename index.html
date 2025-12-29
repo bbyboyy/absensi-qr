@@ -232,6 +232,7 @@
         }
 
         function startScanner() {
+            document.getElementById("status").innerText = "";
             qr.start(
                 { facingMode: "environment" },
                 { fps: 10, qrbox: 250 },
@@ -243,6 +244,7 @@
         }
 
         function restartScanner() {
+            document.getElementById("status").innerText = "";
             qr.stop().then(() => {
                 qr.start(
                     { facingMode: "environment" },
