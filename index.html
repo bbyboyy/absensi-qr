@@ -50,6 +50,7 @@ function onScanSuccess(decodedText) {
     
   if (!name.trim()) {
     alert("Nama wajib diisi");
+    restartScanner();
     return;
   }
   
