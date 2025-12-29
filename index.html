@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Absensi QR</title>
+    <title>Absensi SMB</title>
     <script src="https://unpkg.com/html5-qrcode"></script>
 
     <!-- PWA -->
@@ -69,13 +69,13 @@
             font-size: 16px;
             border-radius: 8px;
             border: none;
-            background: #0d6efd;
+            background: #91C6BC;
             color: white;
             cursor: pointer;
         }
 
         .buttons button:last-child {
-            background: #6c757d;
+            background: #5e6d6a;
         }
 
         #reader {
@@ -118,7 +118,7 @@
     <p id="status"></p> -->
 
     <div class="app">
-        <h2>Scan QR untuk Absensi</h2>
+        <h2>Scan QR Absensi SMB</h2>
 
         <div class="form">
             <input type="text" id="nama" placeholder="Nama">
@@ -182,7 +182,7 @@
                 const jarak = getDistance(lat, lng, OFFICE_LAT, OFFICE_LNG);
                 const status = jarak <= MAX_RADIUS ? "VALID" : "DI LUAR AREA";
 
-                if (jarak <= MAX_RADIUS) {
+                if (jarak > MAX_RADIUS) {
                     alert("Jarak anda diluar jangkauan! Max 100 meter (" + Math.round(jarak) + "m)");
                     restartScanner();
                     return;
