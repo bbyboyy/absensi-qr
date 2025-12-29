@@ -39,7 +39,20 @@ function getDistance(lat1, lon1, lat2, lon2) {
   return R * (2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)));
 }
 
+const qr = new Html5Qrcode("reader");
+
 function onScanSuccess(decodedText) {
+  console.log("QR scanned:", decodedText);
+  qr.stop();
+
+  let qrData;
+try {
+  qrData = JSON.parse(decodedText);
+} catch (e) {
+  alert("QR tidak valid");
+  return;
+}
+
   navigator.geolocation.getCurrentPosition(pos => {
     const lat = pos.coords.latitude;
     const lng = pos.coords.longitude;
@@ -47,9 +60,9 @@ function onScanSuccess(decodedText) {
     const jarak = getDistance(lat, lng, OFFICE_LAT, OFFICE_LNG);
     const status = jarak <= MAX_RADIUS ? "VALID" : "DI LUAR AREA";
 
-    const urlParams = new URLSearchParams(window.location.search);
-    const token = urlParams.get("token");
-    const API_URL = "https://script.google.com/macros/s/AKfycbym0TUkwd-tOcwxRkwbiebefQBk86uwQfaSmoj6wmX8-to-J4Nwb7xT-BzIvrdYP5FJ/exec";
+    // const urlParams = new URLSearchParams(window.location.search);
+    // const token = urlParams.get("token");
+    // const API_URL = "https://script.google.com/macros/s/AKfycbym0TUkwd-tOcwxRkwbiebefQBk86uwQfaSmoj6wmX8-to-J4Nwb7xT-BzIvrdYP5FJ/exec";
 
     // fetch("https://script.google.com/macros/s/AKfycbym0TUkwd-tOcwxRkwbiebefQBk86uwQfaSmoj6wmX8-to-J4Nwb7xT-BzIvrdYP5FJ/exec", {
     //   method: "POST",
@@ -63,7 +76,7 @@ function onScanSuccess(decodedText) {
     //   })
     // });
 
-    const qrData = JSON.parse(scannedText);
+    // const qrData = JSON.parse(decodedText);
 
     fetch("https://absensi-backend.martinusdx001.workers.dev/", {
       method: "POST",
@@ -79,15 +92,28 @@ function onScanSuccess(decodedText) {
       })
     })
     .then(res => res.json())
-    .then(data => alert(data.result));
+    .then(data => alert(data.result))
+    .catch(err => {
+        console.error(err);
+        alert("Gagal kirim absensi");
+    });
 
     document.getElementById("status").innerText =
       `Absensi ${status} (${Math.round(jarak)} m)`;
   });
 }
 
-new Html5Qrcode("reader")
-  .start({ facingMode: "environment" }, { fps: 10, qrbox: 250 }, onScanSuccess);
+qr.start(
+  { facingMode: "environment" },
+  { fps: 10, qrbox: 250 },
+  onScanSuccess,
+  errorMessage => {
+    console.log("Scan error:", errorMessage);
+  }
+);
+
+// new Html5Qrcode("reader")
+//   .start({ facingMode: "environment" }, { fps: 10, qrbox: 250 }, onScanSuccess);
 
 if ("serviceWorker" in navigator) {
     navigator.serviceWorker.register("service-worker.js")
