@@ -62,6 +62,7 @@ try {
   qrData = JSON.parse(decodedText);
 } catch (e) {
   alert("QR tidak valid");
+  restartScanner();
   return;
 }
 
@@ -71,6 +72,13 @@ try {
 
     const jarak = getDistance(lat, lng, OFFICE_LAT, OFFICE_LNG);
     const status = jarak <= MAX_RADIUS ? "VALID" : "DI LUAR AREA";
+
+    if (jarak <= MAX_RADIUS)
+    {
+        alert("Jarak anda diluar jangkauan! Max 100 meter (" + Math.round(jarak) + "m)");
+        restartScanner();
+        return;
+    }
 
     // const urlParams = new URLSearchParams(window.location.search);
     // const token = urlParams.get("token");
@@ -111,7 +119,7 @@ try {
     });
 
     document.getElementById("status").innerText =
-      `Absensi ${status} (${Math.round(jarak)} m)`;
+      `Jarak ${status} (${Math.round(jarak)} m)`;
   });
 }
 
