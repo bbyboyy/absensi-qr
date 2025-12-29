@@ -42,6 +42,14 @@ function getDistance(lat1, lon1, lat2, lon2) {
 const qr = new Html5Qrcode("reader");
 
 function onScanSuccess(decodedText) {
+  const name = document.getElementById("nama").value;
+  const userid = document.getElementById("userid").value;
+    
+  if (!name.trim()) {
+    alert("Nama wajib diisi");
+    return;
+  }
+  
   console.log("QR scanned:", decodedText);
   qr.stop();
 
