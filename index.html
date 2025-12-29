@@ -122,7 +122,7 @@
 
         <div class="form">
             <input type="text" id="nama" placeholder="Nama">
-            <input type="text" id="userid" placeholder="User ID">
+            <!-- <input type="text" id="userid" placeholder="User ID"> -->
         </div>
 
         <div class="buttons">
@@ -155,7 +155,7 @@
 
         function onScanSuccess(decodedText) {
             const name = document.getElementById("nama").value;
-            const userid = document.getElementById("userid").value;
+            // const userid = document.getElementById("userid").value;
 
             if (!name.trim()) {
                 alert("Nama wajib diisi");
@@ -213,7 +213,7 @@
                         action: "ABSEN",
                         token: qrData.token,
                         nama: document.getElementById("nama").value,
-                        userid: document.getElementById("userid").value,
+                        userid: "",
                         lat,
                         lng,
                         jarak: Math.round(jarak)
