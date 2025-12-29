@@ -19,6 +19,9 @@
 <input type="text" id="nama" placeholder="Nama"><br><br>
 <input type="text" id="userid" placeholder="User ID"><br><br>
 
+<button onclick="startScanner()">Scan Barcode</button><br><br>
+<button onclick="restartScanner()">Scan ulang</button><br><br>
+
 <div id="reader" style="width:300px"></div>
 
 <p id="status"></p>
@@ -111,14 +114,30 @@ try {
   });
 }
 
-qr.start(
-  { facingMode: "environment" },
-  { fps: 10, qrbox: 250 },
-  onScanSuccess,
-  errorMessage => {
-    console.log("Scan error:", errorMessage);
-  }
-);
+function startScanner() {
+    qr.start(
+      { facingMode: "environment" },
+      { fps: 10, qrbox: 250 },
+      onScanSuccess,
+      errorMessage => {
+        console.log("Scan error:", errorMessage);
+      }
+    );
+}
+
+function restartScanner() {
+  qr.stop().then(() => {
+    qr.start(
+      { facingMode: "environment" },
+      { fps: 10, qrbox: 250 },
+      onScanSuccess,
+      errorMessage => {
+        console.log("Scan error:", errorMessage);
+      }
+    );
+  });
+}
+
 
 // new Html5Qrcode("reader")
 //   .start({ facingMode: "environment" }, { fps: 10, qrbox: 250 }, onScanSuccess);
