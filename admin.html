@@ -1,67 +1,148 @@
 <!DOCTYPE html>
 <html>
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Generate QR Absensi</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/qrcodejs/qrcode.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            background: #f3f4f6;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .container {
+            background: #fff;
+            padding: 24px;
+            width: 100%;
+            max-width: 400px;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        h3 {
+            margin-bottom: 16px;
+        }
+
+        button {
+            width: 100%;
+            padding: 14px;
+            font-size: 16px;
+            border: none;
+            border-radius: 8px;
+            background: #1D546D;
+            color: white;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #1f4252;
+        }
+
+        #qr {
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        #tokenText {
+            margin-top: 12px;
+            font-weight: bold;
+            color: #374151;
+            word-break: break-all;
+        }
+
+        @media (min-width: 768px) {
+            .container {
+                max-width: 450px;
+            }
+        }
+    </style>
+</head>
+
 <body>
-<h3>Generate QR Absensi</h3>
-<button onclick="generate()">Generate QR</button>
-<div id="qr" style="margin-top:20px;"></div>
-<p id="tokenText"></p>
+    <!-- <h3>Generate QR Absensi</h3>
+    <button onclick="generate()">Generate QR</button>
+    <div id="qr" style="margin-top:20px;"></div>
+    <p id="tokenText"></p> -->
 
-<script src="https://cdn.jsdelivr.net/npm/qrcodejs/qrcode.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-<script>
-// function generate() {
-// //   fetch("https://script.google.com/macros/s/AKfycbym0TUkwd-tOcwxRkwbiebefQBk86uwQfaSmoj6wmX8-to-J4Nwb7xT-BzIvrdYP5FJ/exec")
-// //     .then(res => res.text())
-// //     .then(token => {
-// //       const url = location.origin + "/?token=" + token;
-// //       document.getElementById("qr").innerHTML = "";
-// //       new QRCode(document.getElementById("qr"), url);
-// //     });
-    
-//     const API_URL = "https://script.google.com/macros/s/AKfycbym0TUkwd-tOcwxRkwbiebefQBk86uwQfaSmoj6wmX8-to-J4Nwb7xT-BzIvrdYP5FJ/exec";
-//     fetch(API_URL, {
-//       method: "POST",
-//       body: new URLSearchParams({
-//         action: "GENERATE_TOKEN"
-//       })
-//     })
-//     .then(res => res.json())
-//     .then(data => {
-//       alert("Token: " + data.token);
-//     })
-//     .catch(e => console.error(e));
-// }
+    <div class="container">
+        <h3>Generate QR Absensi</h3>
+        <button onclick="generate()">Generate QR</button>
 
-function generate() {
-  fetch("https://absensi-backend.martinusdx001.workers.dev/", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      action: "GENERATE_TOKEN"
-    })
-  })
-  .then(res => res.json())
-  .then(data => {
-    alert("Token: " + data.token)
+        <div id="qr"></div>
+        <p id="tokenText"></p>
+    </div>
 
-    document.getElementById("tokenText").innerText =
-      "Token: " + data.token;
+    <script>
+        // function generate() {
+        // //   fetch("https://script.google.com/macros/s/AKfycbym0TUkwd-tOcwxRkwbiebefQBk86uwQfaSmoj6wmX8-to-J4Nwb7xT-BzIvrdYP5FJ/exec")
+        // //     .then(res => res.text())
+        // //     .then(token => {
+        // //       const url = location.origin + "/?token=" + token;
+        // //       document.getElementById("qr").innerHTML = "";
+        // //       new QRCode(document.getElementById("qr"), url);
+        // //     });
 
-    const qrContainer = document.getElementById("qr");
-    qrContainer.innerHTML = ""; // clear QR lama
+        //     const API_URL = "https://script.google.com/macros/s/AKfycbym0TUkwd-tOcwxRkwbiebefQBk86uwQfaSmoj6wmX8-to-J4Nwb7xT-BzIvrdYP5FJ/exec";
+        //     fetch(API_URL, {
+        //       method: "POST",
+        //       body: new URLSearchParams({
+        //         action: "GENERATE_TOKEN"
+        //       })
+        //     })
+        //     .then(res => res.json())
+        //     .then(data => {
+        //       alert("Token: " + data.token);
+        //     })
+        //     .catch(e => console.error(e));
+        // }
 
-    const qrData = JSON.stringify({
-      token: data.token,
-      date: new Date().toISOString().slice(0, 10)
-    });
+        function generate() {
+            fetch("https://absensi-backend.martinusdx001.workers.dev/", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    action: "GENERATE_TOKEN"
+                })
+            })
+                .then(res => res.json())
+                .then(data => {
+                    alert("Token: " + data.token)
 
-    new QRCode(qrContainer, {
-      text: qrData,
-      width: 256,
-      height: 256
-    });
-  });
-}
-</script>
+                    document.getElementById("tokenText").innerText =
+                        "Token: " + data.token;
+
+                    const qrContainer = document.getElementById("qr");
+                    qrContainer.innerHTML = ""; // clear QR lama
+
+                    const qrData = JSON.stringify({
+                        token: data.token,
+                        date: new Date().toISOString().slice(0, 10)
+                    });
+
+                    new QRCode(qrContainer, {
+                        text: qrData,
+                        width: 256,
+                        height: 256
+                    });
+                });
+        }
+    </script>
 </body>
+
 </html>
