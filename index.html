@@ -69,13 +69,13 @@
             font-size: 16px;
             border-radius: 8px;
             border: none;
-            background: #91C6BC;
+            background: #1D546D;
             color: white;
             cursor: pointer;
         }
 
         .buttons button:last-child {
-            background: #5e6d6a;
+            background: #30424b;
         }
 
         #reader {
@@ -132,6 +132,17 @@
 
         <div id="reader"></div>
         <p id="status"></p>
+
+        <br><br><br>
+        <h2>Izin Tidak Hadir</h2>
+        <div class="form">
+            <input type="text" id="alasan" placeholder="Alasan">
+            <!-- <input type="text" id="userid" placeholder="User ID"> -->
+        </div>
+
+        <div class="buttons">
+            <button onclick="izinAbsen()">Izin</button>
+        </div>
     </div>
 
     <!-- Script -->
@@ -257,6 +268,38 @@
             });
         }
 
+        function izinAbsen() {
+            const name = document.getElementById("nama").value;
+            const alasan = document.getElementById("alasan").value;
+            // const userid = document.getElementById("userid").value;
+
+            if (!name.trim()) {
+                alert("Nama wajib diisi");
+                return;
+            }
+            
+            if (!alasan) {
+                alert("Alasan wajib diisi");
+                return;
+            }
+
+            fetch("https://absensi-backend.martinusdx001.workers.dev/", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        action: "IZIN",
+                        nama: document.getElementById("nama").value,
+                        alasan: document.getElementById("alasan").value
+                    })
+                })
+                    .then(res => res.json())
+                    .then(data => alert(data.result))
+                    .catch(err => {
+                        console.error(err);
+                        alert("Gagal kirim izin absensi");
+                    });
+
+        }
 
         // new Html5Qrcode("reader")
         //   .start({ facingMode: "environment" }, { fps: 10, qrbox: 250 }, onScanSuccess);
