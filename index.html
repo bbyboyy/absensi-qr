@@ -100,6 +100,7 @@
             }
         }
 
+        /* === LOADING OVERLAY === */
         .hidden {
             display: none !important;
         }
@@ -137,6 +138,58 @@
                 transform: rotate(360deg);
             }
         }
+
+        /* === TOAST NOTIFICATION === */
+        .toast {
+            position: fixed;
+            left: 50%;
+            bottom: 20px;
+            transform: translateX(-50%) translateY(20px);
+            min-width: 220px;
+            max-width: 90%;
+            padding: 14px 18px;
+            border-radius: 12px;
+            font-size: 15px;
+            text-align: center;
+            color: white;
+            opacity: 0;
+            pointer-events: none;
+            z-index: 999999;
+
+            /* Animasi */
+            transition: opacity .35s ease, transform .35s cubic-bezier(.4, 0, .2, 1);
+        }
+
+        /* iOS glass effect */
+        .toast.ios {
+            background: rgba(30, 30, 30, 0.75);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+
+        /* Android solid */
+        .toast.android {
+            background: #323232;
+        }
+
+        /* State tampil */
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        /* Warna status */
+        .toast.success {
+            background: #2e7d32;
+        }
+
+        .toast.error {
+            background: #c62828;
+        }
+
+        .toast.info {
+            background: #1976d2;
+        }
     </style>
 
 </head>
@@ -154,6 +207,8 @@
     <div id="reader" style="width:300px"></div>
 
     <p id="status"></p> -->
+    <div id="toast" class="toast"></div>
+
     <div id="loading" class="hidden">
         <div class="loading-box">
             <div class="spinner"></div>
@@ -212,6 +267,20 @@
             document.getElementById("loading").classList.add("hidden");
         }
 
+        function showToast(message, type = "success", duration = 3000) {
+            const toast = document.getElementById("toast");
+
+            const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+
+            toast.textContent = message;
+            toast.className = "toast show " +
+                (isIOS ? "ios" : "android") + " " + type;
+
+            setTimeout(() => {
+                toast.classList.remove("show");
+            }, duration);
+        }
+
         function getDistance(lat1, lon1, lat2, lon2) {
             const R = 6371000;
             const dLat = (lat2 - lat1) * Math.PI / 180;
@@ -231,7 +300,8 @@
             // const userid = document.getElementById("userid").value;
 
             if (!name.trim()) {
-                alert("Nama wajib diisi");
+                // alert("Nama wajib diisi");
+                showToast("Nama wajib diisi", "error");
                 restartScanner();
                 return;
             }
@@ -243,7 +313,8 @@
             try {
                 qrData = JSON.parse(decodedText);
             } catch (e) {
-                alert("QR tidak valid");
+                // alert("QR tidak valid");
+                showToast("QR tidak valid", "error");
                 restartScanner();
                 return;
             }
@@ -257,7 +328,8 @@
                 const status = jarak <= MAX_RADIUS ? "VALID" : "DI LUAR AREA";
 
                 if (jarak > MAX_RADIUS) {
-                    alert("Jarak anda diluar jangkauan! Max 25 meter (" + Math.round(jarak) + "m)");
+                    // alert("Jarak anda diluar jangkauan! Max 25 meter (" + Math.round(jarak) + "m)");
+                    showToast("Jarak anda diluar jangkauan! Max 30 meter (" + Math.round(jarak) + "m)", "error");
                     restartScanner();
                     return;
                 }
@@ -297,10 +369,12 @@
                     });
 
                     const data = await res.json();
-                    alert(data.result);
+                    // alert(data.result);
+                    showToast(data.result, "success");
                 } catch (err) {
                     console.error(err);
-                    alert("Gagal kirim absensi");
+                    // alert("Gagal kirim absensi");
+                    showToast("Gagal kirim absensi", "error");
                 } finally {
                     hideLoading();
                 }
@@ -309,7 +383,8 @@
                     `Jarak ${status} (${Math.round(jarak)} m)`;
             },
                 () => {
-                    alert("Gagal mendapatkan lokasi. Izinkan akses lokasi pada browser Anda.");
+                    // alert("Gagal mendapatkan lokasi. Izinkan akses lokasi pada browser Anda.");
+                    showToast("Gagal mendapatkan lokasi. Izinkan akses lokasi pada browser Anda.", "error");
                     restartScanner();
                 },
                 { enableHighAccuracy: true, timeout: 10000 }
