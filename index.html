@@ -324,7 +324,7 @@
                 const lng = pos.coords.longitude;
 
                 let jarak = getDistance(lat, lng, OFFICE_LAT, OFFICE_LNG);
-                jarak = 10; // TEMP UNTUK TESTING
+                // jarak = 10; // TEMP UNTUK TESTING
                 const status = jarak <= MAX_RADIUS ? "VALID" : "DI LUAR AREA";
 
                 if (jarak > MAX_RADIUS) {
